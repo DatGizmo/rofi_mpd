@@ -23,6 +23,8 @@ def get_epoch_from_date(date):
             split_char = '-'
         elif '.' in date:
             split_char = '.'
+        elif '/' in date:
+            split_char = '/'
 
         date_list = date.split(split_char)
 
@@ -30,13 +32,22 @@ def get_epoch_from_date(date):
             date_list.append(1)
 
         # Very basic date validation and correction
-        year = int(date_list[0])
-        month = int(date_list[1])
-        day = int(date_list[2])
-        if year < 1 or year > 9999:
+        try:
+            year = int(date_list[0])
+            if year < 1 or year > 9999:
+                year = 1
+        except(ValueError):
             year = 1
-        if month < 1 or month > 12:
+        try:
+            month = int(date_list[1])
+            if month < 1 or month > 12:
+                month = 1
+        except(ValueError):
             month = 1
+        try:
+            day = int(date_list[2])
+        except(ValueError):
+            day = 1
         if day < 1 or day > 31:
             day = 1
 
