@@ -77,8 +77,7 @@ def select_track(tracks, rofi: Rofi, discs=False, cycle=True):
             extras.append('Disc...')
 
     display_tracks = extras + [
-        '[%s.%s]  \t%s [%s - %s]' % (
-            get_tag('disc', track),
+        '[%2s] %s [%s - %s]' % (
             get_tag('track', track),
             get_tag('title', track),
             get_tag('album', track),
@@ -182,25 +181,25 @@ def get_tracks(client, rofi):
         tracks = client.find('(title != "")')
     elif args.albums:
         albums = client.list('album')
-        album = get_album(client, rofi, albums)
+        album = get_album(client, rofi, [a['album'] for a in albums])
 
         tracks = client.find('album', album)
 
     elif args.genres:
         genres = client.list('genre')
-        genre = select_genre(genres, rofi)
+        genre = select_genre([a['genre'] for a in genres], rofi)
 
         albums = client.list('album', '(genre == "%s")' % genre)
-        album = get_album(client, rofi, albums)
+        album = get_album(client, rofi, [a['album'] for a in albums])
 
         tracks = client.find('genre', genre, 'album', album)
 
     else:
         artists = client.list('artist')
-        artist = select_artist(artists, rofi)
+        artist = select_artist([a['artist'] for a in artists], rofi)
 
         albums = client.list('album', '(artist == "%s")' % artist)
-        album = get_album(client, rofi, albums, artist)
+        album = get_album(client, rofi, [a['album'] for a in albums], artist)
 
         tracks = client.find('artist', artist, 'album', album)
 
